@@ -3,46 +3,111 @@ import pandas as pd
 import database as db
 
 def show():
-    st.title("Manajemen Gudang")
-    st.markdown('<p class="text-muted">Home >📦 Manajemen Gudang</p>', unsafe_allow_html=True)
+    st.title("Gudang & Inventaris")
     
-    df = db.load_data()
-    if df.empty:
-        st.warning("Belum ada data.")
-        return
+    # --- TABS NAVIGATION ---
+    tab_main, tab_in, tab_out = st.tabs(["📦 Stok Gudang", "📥 Riwayat Masuk", "📤 Riwayat Keluar"])
 
-    col_table, col_edit = st.columns([2, 1])
-    
-    with col_table:
+    # === TAB 1: MAIN TABLE (STOK SAAT INI) ===
+    with tab_main:
         st.markdown('<div class="white-card">', unsafe_allow_html=True)
-        st.markdown('<div class="card-title">List of All Transactions</div>', unsafe_allow_html=True)
-        st.dataframe(df, use_container_width=True, hide_index=True, height=450)
+        st.subheader("Daftar Ketersediaan Barang")
+        st.caption("Tabel ini menampilkan total stok akumulasi per item (Tanpa detail tanggal).")
+        
+        # Load Data Summary (Group by Item)
+        df_summary = db.get_stock_summary()
+        
+        if not df_summary.empty:
+            # Search Filter
+            search = st.text_input("🔍 Cari Barang:", placeholder="Ketik nama item...", key="search_main")
+            if search:
+                df_summary = df_summary[df_summary['Nama Barang'].str.contains(search, case=False)]
+            
+            # Tampilkan Tabel (White & Readable)
+            st.dataframe(
+                df_summary,
+                use_container_width=True,
+                hide_index=True,
+                height=500,
+                column_config={
+                    "Stok Tersedia": st.column_config.NumberColumn(
+                        "Stok Tersedia",
+                        help="Total Masuk - Total Keluar",
+                        format="%d"
+                    )
+                }
+            )
+        else:
+            st.info("Belum ada data stok.")
         st.markdown('</div>', unsafe_allow_html=True)
 
-    with col_edit:
-        st.markdown('<div class="white-card" style="padding:0;">', unsafe_allow_html=True)
-        st.markdown('<div class="form-header">✏️ Edit / Delete Action</div>', unsafe_allow_html=True)
-        st.markdown('<div style="padding:20px;">', unsafe_allow_html=True)
+    # === TAB 2: RIWAYAT MASUK (STOCK IN HISTORY) ===
+    with tab_in:
+        st.markdown('<div class="white-card">', unsafe_allow_html=True)
+        c1, c2 = st.columns([4, 1])
+        with c1:
+            st.subheader("📥 Histori Barang Masuk")
+        with c2:
+            if st.button("➕ Input Baru", key="btn_add_in"):
+                st.toast("Gunakan form di tab 'Input' (jika ada) atau buat modal dialog.")
+
+        df_in = db.get_stock_ins_history()
         
-        list_id = df['id'].tolist()
-        pilih_id = st.selectbox("Select ID to Action:", list_id)
+        if not df_in.empty:
+            st.dataframe(
+                df_in,
+                use_container_width=True,
+                hide_index=True,
+                column_config={
+                    "tanggal": st.column_config.DateColumn("Tanggal Beli"),
+                    "harga": st.column_config.NumberColumn("Harga", format="Rp %d")
+                }
+            )
+        else:
+            st.warning("Belum ada data pemasukan.")
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # === TAB 3: RIWAYAT KELUAR (STOCK OUT HISTORY) ===
+    with tab_out:
+        col_form, col_data = st.columns([1, 2])
         
-        if pilih_id:
-            curr_data = df[df['id'] == pilih_id].iloc[0]
-            with st.form("edit_form"):
-                e_tgl = st.date_input("Date", pd.to_datetime(curr_data['tanggal_pembelian']))
-                e_spl = st.text_input("Supplier", curr_data['supplier'])
-                e_itm = st.text_input("Item", curr_data['item'])
-                e_qty = st.number_input("Qty", value=int(curr_data['quantity']))
-                e_hrg = st.number_input("Price", value=int(curr_data['harga']))
-                e_ket = st.text_area("Notes", curr_data['keterangan'])
+        # Form Input Barang Keluar (Manual untuk saat ini)
+        with col_form:
+            st.markdown('<div class="white-card">', unsafe_allow_html=True)
+            st.markdown("#### Catat Penggunaan")
+            with st.form("form_out"):
+                # Ambil list item dari database agar user tidak typo
+                list_items = df_summary['Nama Barang'].unique().tolist() if not df_summary.empty else []
+                list_units = df_summary['Satuan'].unique().tolist() if not df_summary.empty else []
                 
-                st.markdown("---")
-                c_btn1, c_btn2 = st.columns(2)
-                if c_btn1.form_submit_button("💾 Save", type="primary", use_container_width=True):
-                    if db.update_data(pilih_id, e_tgl, e_spl, e_itm, e_qty, e_hrg, e_ket):
-                        st.success("Updated!"); st.rerun()
-                if c_btn2.form_submit_button("🗑️ Delete", type="secondary", use_container_width=True):
-                    if db.delete_data(pilih_id):
-                        st.success("Deleted!"); st.rerun()
-        st.markdown('</div></div>', unsafe_allow_html=True)
+                o_tgl = st.date_input("Tanggal Keluar")
+                o_itm = st.selectbox("Nama Barang", list_items)
+                o_qty = st.number_input("Jumlah Terpakai", min_value=1, value=1)
+                o_unit = st.selectbox("Satuan", list_units)
+                o_ket = st.text_input("Nama Project / Keterangan", placeholder="Contoh: Seragam SD...")
+                
+                if st.form_submit_button("Simpan Data Keluar", type="primary", use_container_width=True):
+                    if db.insert_stock_out(o_tgl, o_itm, o_qty, o_unit, o_ket):
+                        st.success("Berhasil disimpan!")
+                        st.rerun()
+            st.markdown('</div>', unsafe_allow_html=True)
+            
+        # Tabel Data Keluar
+        with col_data:
+            st.markdown('<div class="white-card">', unsafe_allow_html=True)
+            st.subheader("📤 Log Barang Keluar")
+            df_out = db.get_stock_outs_history()
+            
+            if not df_out.empty:
+                st.dataframe(
+                    df_out,
+                    use_container_width=True,
+                    hide_index=True,
+                    column_config={
+                        "tanggal": st.column_config.DateColumn("Tanggal"),
+                        "qty": st.column_config.NumberColumn("Qty Keluar")
+                    }
+                )
+            else:
+                st.info("Belum ada barang keluar tercatat.")
+            st.markdown('</div>', unsafe_allow_html=True)
