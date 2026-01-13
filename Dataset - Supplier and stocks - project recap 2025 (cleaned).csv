@@ -1,0 +1,74 @@
+NO,"TANGGAL
+PEMESANAN",INSTANSI,ITEM PROJECT,QTY,SATUAN,HARGA,JUMLAH,RAB,REALISASI,PROFIT,SERAGAM SEKOLAH
+1,1,Balai Besar Wilayah Sungai Jombang,PDH BBWS,30,pcs,"Rp  200,000","Rp  6,000,000","Rp  3,428,575","Rp  3,251,000","Rp  2,749,000",no
+2,1,Puskesmas Ketabang Surabaya,PDH Puskesmas Ketabang,49,pcs,"Rp  180,628","Rp  8,850,772","Rp  6,725,000","Rp  5,961,050","Rp  2,889,722",no
+3,2,SMPN 41 Surabaya,ATK SMPN 41,1,Paket ATK,"Rp  5,875,233","Rp  5,875,233","Rp  4,090,000","Rp  4,052,200","Rp  1,823,033",no
+4,3,OSIS SMPN 12 Surabaya,Kaos OSIS,56,pcs,"Rp  67,200","Rp  3,763,200","Rp  2,194,000","Rp  2,144,690","Rp  1,618,510",no
+5,3,HMP Tapsitera UINSA,PDH HMP TAPSITERA UINSA,45,pcs,"Rp  120,000","Rp  5,400,000","Rp  4,101,000","Rp  4,077,500","Rp  1,322,500",no
+6,3,Pondok Bu Nyai Orange Pacet Mojokerto,Mukena Dewasa,50,pcs,"Rp  150,000","Rp  7,500,000","Rp  7,080,000","Rp  6,904,600","Rp  595,400",no
+,3,Pondok Bu Nyai Orange Pacet Mojokerto,Mukena Remaja,40,pcs,"Rp  70,000","Rp  2,800,000","Rp  2,600,000","Rp  2,600,000","Rp  200,000",no
+,3,Pondok Bu Nyai Orange Pacet Mojokerto,Baju Koko Dewasa,40, pcs,"Rp  125,000","Rp  5,000,000","Rp  5,193,000","Rp  5,184,250","Rp  815,750",no
+,3,Pondok Bu Nyai Orange Pacet Mojokerto,Baju Koko SD,10,pcs,"Rp  100,000","Rp  1,000,000",,,,no
+7,3,Pencak Silat Pagar Nusa Surabaya,PDH Pagar Nusa Sidosermo,24,pcs,"Rp  125,000","Rp  3,000,000","Rp  2,554,500","Rp  2,543,500","Rp  456,500",no
+8,3,SMP Al Falah Surabaya,Seragam Wisuda Wali Murid,27,pcs,"Rp  120,000","Rp  3,240,000","Rp  2,077,500","Rp  2,108,500","Rp  1,131,500",no
+9,4,RSJ Menur Surabaya,Jersey Keswa Uk. S-XL,20,pcs,"Rp  98,000","Rp  2,990,000","Rp  1,960,000","Rp  2,008,120","Rp  981,880",no
+,4,RSJ Menur Surabaya,Jersey Keswa Uk. 2XL-4XL,10,pcs,"Rp  103,000",,"Rp  1,030,000",,,no
+10,4,Pondok Pesantren Al Khadijah,Seragam Wisuda Pondok,58,pcs,"Rp  248,500","Rp  14,413,000","Rp  12,005,000","Rp  11,932,000","Rp  2,481,000",no
+11,5,Satpol PP Surabaya,PDL Satpol PP,395,pcs,"Rp  555,000","Rp  219,225,000","Rp  181,553,000","Rp  183,525,853","Rp  35,699,147",no
+12,5,MTS MA Al - Kharimiyyah Sumenep,Atasan Putih Panjang & Pendek Uk. S-XL 140 pcs x Rp49.000,140,pcs,"Rp  49,000","Rp  6,860,000","Rp  32,765,200","Rp  36,482,166","Rp  8,705,834",yes
+,5,MTS MA Al - Kharimiyyah Sumenep,Atasan Putih Panjang & Pendek Uk. 2XL-3XL 30 pcs x Rp50.000,30,pcs,"Rp  50,000","Rp  1,500,000",,,,yes
+,5,MTS MA Al - Kharimiyyah Sumenep,Atasan Pramuka Panjang & Pendek Uk. S-XL  164 pcs x Rp47.000,164,pcs,"Rp  47,000","Rp  7,708,000",,,,yes
+,5,MTS MA Al - Kharimiyyah Sumenep,Atasan Pramuka Panjang & Pendek Uk. 2XL-3XL  65 pcs x Rp48.000,65,pcs,"Rp  48,000","Rp  3,120,000",,,,yes
+,5,MTS MA Al - Kharimiyyah Sumenep,Rok Abu-Abu Uk. S-XL  60 pcs x Rp60.000,60,pcs,"Rp  60,000","Rp  3,600,000",,,,yes
+,5,MTS MA Al - Kharimiyyah Sumenep,Rok Abu-Abu Uk. 2XL-3XL 10 pcs x Rp60.000,10,pcs,"Rp  61,000","Rp  610,000",,,,yes
+,5,MTS MA Al - Kharimiyyah Sumenep,Rok Pramuka Uk. S-XL  90 pcs x Rp54.000,90,pcs,"Rp  54,000","Rp  4,860,000",,,,yes
+,5,MTS MA Al - Kharimiyyah Sumenep,Rok Pramuka Uk. 2XL-3XL 10 pcs x Rp55.000,10,pcs,"Rp  55,000","Rp  550,000",,,,yes
+,5,MTS MA Al - Kharimiyyah Sumenep,Rok Biru Uk. S-XL  50 pcs x Rp51.000,50,pcs,"Rp  51,000","Rp  2,550,000",,,,yes
+,5,MTS MA Al - Kharimiyyah Sumenep,Celana Biru Uk. S-XL  50 pcs x Rp51.000,50,pcs,"Rp  51,000","Rp  2,550,000",,,,yes
+,5,MTS MA Al - Kharimiyyah Sumenep,Celana Abu-abu Uk. S-XL  50 pcs x Rp60.000,50,pcs,"Rp  60,000","Rp  3,000,000",,,,yes
+,5,MTS MA Al - Kharimiyyah Sumenep,Celana Abu-abu Uk. 2XL-3XL  20 pcs x Rp61.000,20,pcs,"Rp  61,000","Rp  1,220,000",,,,yes
+,5,MTS MA Al - Kharimiyyah Sumenep,Celana Pramuka Uk. S-XL 90 pcs x Rp54.000,90,pcs,"Rp  54,000","Rp  4,860,000",,,,yes
+,5,MTS MA Al - Kharimiyyah Sumenep,Celana Pramuka Uk. 2XL-3XL  40 pcs x Rp55.000,40,pcs,"Rp  55,000","Rp  2,200,000",,,,yes
+13,5,Linmas Kota Surabaya,Kemeja Batik Custom,115,pcs,"Rp  160,000","Rp  18,400,000","Rp  12,680,000","Rp  13,180,000","Rp  5,220,000",no
+14,5,MIS H. Achmad Syukur Kab. Pulau Morotai Maluku,Seragam Batik SD Putri,85,stell,"Rp  160,000","Rp  13,600,000","Rp  22,056,317","Rp  21,096,800","Rp  2,903,200",yes
+,5,MIS H. Achmad Syukur Kab. Pulau Morotai Maluku,Seragam Batik SD Putra,65,stell,"Rp  160,000","Rp  10,400,000",,,,yes
+15,5,PT Kameela Berkah Abadi,Seragam SMA Abu Putih Putra,250,stell,"Rp  195,000","Rp  97,500,000","Rp  64,045,100","Rp  53,367,850","Rp  44,132,150",yes
+16,5,PT. Wahda Puspita Mulia,Seragam SMA Abu Putih Putri,250,stell,"Rp  195,000",,,,,yes
+17,5,Badan Pemerintahan & Kesejahteraan Rakyat Surabaya,Seragam SMA Pramuka Putra,1700,stell,"Rp  215,724","Rp  366,730,800","Rp  409,207,300","Rp  344,998,150","Rp  302,173,850",yes
+18,5,Badan Pemerintahan & Kesejahteraan Rakyat Surabaya,Seragam SMA Pramuka Putri,1300,stell,"Rp  215,724","Rp  280,441,200",,,,yes
+19,5,Sekolah Dasar Kota Surabaya,Seragam Merah Putih MBR SD Tahap I,3613,pcs,"Harga SSH Siplah
+Toko Ladang","Rp  1,293,588,729","Rp  667,771,396","Rp  784,455,896","Rp  509,132,833",yes
+,5,Sekolah Dasar Kota Surabaya,Seragam Pramuka MBR SD Tahap I,4800,pcs,,,,,,yes
+,5,Sekolah Dasar Kota Surabaya,Atribut MBR SD Tahap I,7963,pcs,,,,,,yes
+20,6,Sekolah Menengah Pertama Kota Surabaya,Seragam Biru Putih MBR SMP Tahap I,3598,pcs,,,,,,yes
+,6,Sekolah Menengah Pertama Kota Surabaya,Seragam Pramuka MBR SMP Tahap I,2028,pcs,,,,,,yes
+,6,Sekolah Menengah Pertama Kota Surabaya,Atribut MBR SMP Tahap I,1204,pcs,,,,,,yes
+21,6,Balai Besar Wilayah Sungai Surabaya,Kaos Lapangan BBWS Uk. L-2XL,135,pcs,"Rp  125,000","Rp  17,334,000","Rp  13,778,000","Rp  12,490,670","Rp  4,843,330",no
+,6,Balai Besar Wilayah Sungai Surabaya,Kaos Lapangan BBWS Uk. 3XL,3,pcs,"Rp  130,500","Rp  391,500",,,,no
+22,7,Pertamina,Cuttlepack Pertamina,11,pcs,"Rp  254,880","Rp  2,803,680","Rp  1,836,250","Rp  2,650,250","Rp  330,930",no
+,7,Pertamina,Permak Cuttlepack Pertamina,5,pcs,"Rp  35,000","Rp  175,000",,,,no
+23,7,Balai Besar Wilayah Sungai Surabaya,Kaos Lapangan BBWS II Polo Putih Variasi,23,pcs,"Rp  172,000","Rp  3,956,000","Rp  3,778,000","Rp  2,927,950","Rp  4,416,550",no
+,7,Balai Besar Wilayah Sungai Surabaya,Kaos Lapangan BBWS II Polo Navy Kuning,27,pcs,"Rp  125,500","Rp  3,388,500",,,,no
+24,7,Badan Pemerintahan & Kesejahteraan Rakyat Surabaya,Seragam SMA Pramuka Putri,400,stell,"Rp  215,724",Rp  0,"Rp  54,924,213",Rp  0,Rp  0,yes
+25,8,HMP AFI UINSA,PDH HMP AFI UINSA,47,pcs,"Rp  130,000","Rp  6,110,000","Rp  4,430,000","Rp  5,125,500","Rp  984,500",no
+26,8,MTS - MA Al Kharimiyah Sumenep,Seragam Gamis Pondok ,129,pcs,"Rp  155,000","Rp  19,995,000","Rp  16,147,000","Rp  15,327,060","Rp  4,667,940",yes
+27,8,Sekolah Dasar Kota Surabaya,Seragam Merah Putih MBR SD Tahap II,1835,pcs,"Harga SSH Siplah
+Toko Ladang","Rp  742,656,561","Rp  120,850,029","Rp  277,941,029","Rp  464,715,532",yes
+,8,Sekolah Dasar Kota Surabaya,Seragam Pramuka MBR SD Tahap II,1628,pcs,,,,,,yes
+,8,Sekolah Dasar Kota Surabaya,Atribut MBR SD Tahap II,7498,pcs,,,,,,yes
+28,8,Sekolah Menengah Pertama Kota Surabaya,Seragam Biru Putih MBR SMP Tahap II,526,pcs,,,,,,yes
+,8,Sekolah Menengah Pertama Kota Surabaya,Seragam Pramuka MBR SMP Tahap II,322,pcs,,,,,,yes
+,8,Sekolah Menengah Pertama Kota Surabaya,Atribut MBR SMP Tahap II,188,pcs,,,,,,yes
+29,8,MTS - MA Al Kharimiyyah Sumenep,Atasan Putih Panjang & Pendek Uk. S-XL ,117,pcs,"Rp  49,000","Rp  5,733,000","Rp  13,833,000","Rp  13,298,250","Rp  3,329,750",yes
+,8,MTS - MA Al Kharimiyyah Sumenep,Atasan Putih Panjang & Pendek Uk. 2XL-3XL,18,pcs,"Rp  50,000","Rp  900,000",,,,yes
+,8,MTS - MA Al Kharimiyyah Sumenep,Atasan Pramuka Panjang & Pendek Uk. S-XL,181,pcs,"Rp  47,000","Rp  8,507,000",,,,yes
+,8,MTS - MA Al Kharimiyyah Sumenep,Atasan Pramuka Panjang & Pendek Uk. 2XL-3XL,31,pcs,"Rp  48,000","Rp  1,488,000",,,,yes
+30,9,Pondok Pesantren Mambaul Ma'arif,Seragam Diniyah Santri Putra ,73,pcs,"Rp  98,000","Rp  7,154,000","Rp  12,772,000","Rp  11,838,920","Rp  4,345,080",yes
+,9,Pondok Pesantren Mambaul Ma'arif,Seragam Diniyah Santri Putri,86,pcs,"Rp  105,000","Rp  9,030,000",,,,yes
+31,10,SMPN 12 Surabaya,Jas OSIS,50,pcs,"Rp  100,000","Rp  5,000,000","Rp  4,008,000","Rp  4,048,000","Rp  952,000",no
+32,10,CV Abijaya,T-Shirt Custom ,30,pcs,"Rp  80,000","Rp  2,400,000","Rp  1,672,000","Rp  1,398,460","Rp  1,001,540",no
+33,10,Dinas Perhubungan Kota Surabaya,Rompi Petugas Lapangan,300,pcs,"Rp  245,000","Rp  72,397,500","Rp  62,551,500","Rp  64,802,160","Rp  7,595,340",no
+34,11,Pondok Pesantren Al Khadijah,Seragam Gamis Pondok ,56,pcs,"Rp  177,000","Rp  9,912,000","Rp  7,923,000","Rp  8,213,000","Rp  1,699,000",yes
+35,11,Bank Jatim ,Rompi Juru Parkir,250,pcs,"Rp  165,000","Rp  41,250,000","Rp  26,441,500","Rp  23,184,350","Rp  18,065,650",no
+36,11,Designer (Fiki Aisyah),Seragam Gamis,58,pcs,"Rp  125,000","Rp  7,250,000","Rp  4,570,000","Rp  3,213,000","Rp  4,037,000",no
+37,12,BPBD Kota Surabaya,PDH BPBD,300,stell,Project Berjalan,Project Berjalan,"Rp  94,462,250",Project Berjalan,Project Berjalan,yes
