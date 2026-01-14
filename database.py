@@ -134,6 +134,107 @@ def load_data():
         return df
     return pd.DataFrame()
 
+
+# --- FUNGSI UNTUK HALAMAN PENJAHIT / KARYAWAN ---
+def insert_penjahit(
+    kode_penjahit, nama, nik, alamat, kecamatan, usia,
+    kerapian, ketepatan_waktu, quantity, komitmen,
+    spesialis, status_km
+):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        sql = """
+        INSERT INTO tailors (
+            kode_penjahit, nama, nik, alamat, kecamatan, usia,
+            kerapian, ketepatan_waktu, quantity, komitmen,
+            spesialis, status_keluarga_miskin
+        )
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """
+        cursor.execute(sql, (
+            kode_penjahit, nama, nik, alamat, kecamatan, usia,
+            kerapian, ketepatan_waktu, quantity, komitmen,
+            spesialis, status_km
+        ))
+        conn.commit()
+        return True
+    except Exception as e:
+        print("DB Error:", e)
+        return False
+
+def get_all_karyawan():
+    conn = get_db_connection()
+    query = """
+    SELECT
+        kode_penjahit AS "Kode Penjahit",
+        nama AS "Nama",
+        nik AS "NIK",
+        alamat AS "Alamat",
+        kecamatan AS "Kecamatan",
+        usia AS "Usia",
+        kerapian AS "Kerapian",
+        ketepatan_waktu AS "Ketepatan Waktu",
+        quantity AS "Quantity",
+        komitmen AS "Komitmen",
+        COALESCE(spesialis, 'N/A') AS "Spesialis",
+        COALESCE(status_keluarga_miskin, 'N/A') AS "Status Keluarga Miskin"
+    FROM tailors
+    ORDER BY nama
+    """
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
+
+
+# --- FUNGSI UNTUK HALAMAN PENJUALAN / SALES ---
+def insert_sales_monthly(year, month, month_name, item_count, total_qty):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        sql = """
+        INSERT INTO sales_summary_monthly
+        (year, month, month_name, item_count, total_qty)
+        VALUES (%s, %s, %s, %s, %s)
+        """
+
+        cursor.execute(sql, (
+            year,
+            month,
+            month_name,
+            item_count,
+            total_qty
+        ))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return True
+
+    except Exception as e:
+        print("DB Error:", e)
+        return False
+
+def get_sales_monthly():
+    conn = get_db_connection()
+    query = """
+        SELECT
+            year AS "Tahun",
+            month AS "Bulan (Angka)",
+            month_name AS "Bulan",
+            item_count AS "Jumlah Item",
+            total_qty AS "Total Qty"
+        FROM sales_summary_monthly
+        ORDER BY year, month
+    """
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
+
+
+
+
 # --- TAMBAHKAN FUNGSI INI DI PALING BAWAH database.py ---
 
 def delete_inventory_log(id_log):
