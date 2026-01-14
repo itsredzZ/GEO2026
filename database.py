@@ -1,6 +1,7 @@
 import mysql.connector
 import pandas as pd
 import streamlit as st
+import os
 
 def get_db_connection():
     try:
@@ -10,6 +11,95 @@ def get_db_connection():
     except mysql.connector.Error as e:
         st.error(f"Error connecting to database: {e}")
         return None
+# --- FUNGSI KHUSUS DASHBOARD ---
+
+# --- FUNGSI KHUSUS DASHBOARD (UPDATED) ---
+def get_dashboard_metrics():
+    conn = get_db_connection()
+    metrics = {
+        "total_asset": 0,
+        "total_tailors": 0,
+        "items_sold": 0,          # Ini sekarang akan berisi Data Penjualan 2025
+        "top_supplier": "-",      
+        "top_supplier_vol": 0,    
+        "low_stock_count": 0
+    }
+    
+    if conn:
+        # 1. Hitung Total Aset
+        df_stock = get_stock_summary() 
+        df_prices = pd.read_sql("SELECT item, AVG(harga) as avg_price FROM inventory_logs GROUP BY item", conn)
+        
+        if not df_stock.empty and not df_prices.empty:
+            df_stock = df_stock.merge(df_prices, left_on='Nama Barang', right_on='item', how='left')
+            df_stock['valuation'] = df_stock['Stok Tersedia'] * df_stock['avg_price']
+            metrics['total_asset'] = df_stock['valuation'].sum()
+            metrics['low_stock_count'] = len(df_stock[df_stock['Stok Tersedia'] < 10])
+
+        # 2. Hitung Total Penjahit
+        cur = conn.cursor()
+        cur.execute("SELECT COUNT(*) FROM tailors")
+        result_tailor = cur.fetchone()
+        if result_tailor:
+            metrics['total_tailors'] = result_tailor[0]
+
+        # 3. Hitung TOTAL PENJUALAN TAHUN 2025 (LOGIC BARU)
+        # Kita ambil dari file eksternal karena 'stock_outs' adalah pemakaian bahan, bukan penjualan produk.
+        try:
+            # OPSI A: Coba baca dari file Rekap Bulanan (yang dipakai di chart)
+            if os.path.exists("Total quantity monthly.xlsx"):
+                df_sales = pd.read_excel("Total quantity monthly.xlsx")
+                # Filter hanya tahun 2025 dan sum QTY
+                # Pastikan nama kolom di Excel sesuai (misal: 'YEAR' dan 'QTY')
+                total_2025 = df_sales[df_sales['YEAR'] == 2025]['SUM of QTY'].sum()
+                metrics['items_sold'] = total_2025
+            
+            # OPSI B: Jika Excel tidak ada, coba baca CSV Raw 2025
+            elif os.path.exists("Dataset - Supplier and stocks - project recap 2025 (cleaned).csv"):
+                df_raw = pd.read_csv("Dataset - Supplier and stocks - project recap 2025 (cleaned).csv")
+                metrics['items_sold'] = df_raw['QTY'].sum()
+                
+            else:
+                metrics['items_sold'] = 0
+                
+        except Exception as e:
+            print(f"Error calculating sales 2025: {e}")
+            metrics['items_sold'] = 0
+
+        # 4. Hitung TOP SUPPLIER (NEW)
+        # Mengurutkan supplier berdasarkan total qty barang yang mereka kirim
+        query_supp = """
+            SELECT supplier, SUM(qty) as total_supply 
+            FROM inventory_logs 
+            GROUP BY supplier 
+            ORDER BY total_supply DESC 
+            LIMIT 1
+        """
+        df_supp = pd.read_sql(query_supp, conn)
+        
+        if not df_supp.empty:
+            metrics['top_supplier'] = df_supp.iloc[0]['supplier']
+            metrics['top_supplier_vol'] = df_supp.iloc[0]['total_supply']
+        
+        conn.close()
+    
+    return metrics
+
+def get_monthly_sales_data():
+    conn = get_db_connection()
+    if conn:
+        # Mengambil data summary bulanan (Jika table sales_summary_monthly sudah diisi)
+        # Jika belum ada, kita bisa hitung on-the-fly dari stock_outs
+        query = """
+            SELECT DATE_FORMAT(tanggal, '%Y-%m') as month_year, SUM(qty) as total_qty 
+            FROM stock_outs 
+            GROUP BY month_year 
+            ORDER BY month_year
+        """
+        df = pd.read_sql(query, conn)
+        conn.close()
+        return df
+    return pd.DataFrame()
 
 # --- FUNGSI HALAMAN UTAMA (STOK) - SMART AGGREGATION ---
 def get_stock_summary():

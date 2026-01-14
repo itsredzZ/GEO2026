@@ -45,13 +45,15 @@ def load_css():
     }
 
     /* CARD STYLING */
+    /* 4. KARTU (CARD) */
     .white-card {
         background-color: #ffffff;
         border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         margin-bottom: 20px;
         border: 1px solid #e2e8f0;
+        padding: 20px !important; /* Kembalikan padding normal */
+        overflow: visible !important; /* <--- GANTI INI KE VISIBLE */
     }
     </style>
     """, unsafe_allow_html=True)
