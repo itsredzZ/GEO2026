@@ -11,49 +11,73 @@ def get_db_connection():
         st.error(f"Error connecting to database: {e}")
         return None
 
-# --- FUNGSI UNTUK HALAMAN UTAMA (STOK SAAT INI) ---
+# --- FUNGSI HALAMAN UTAMA (STOK) - SMART AGGREGATION ---
 def get_stock_summary():
     conn = get_db_connection()
     if conn:
-        # 1. Ambil Total Masuk per Item
-        query_in = """
-            SELECT item, kategori, satuan, SUM(qty) as total_masuk 
-            FROM inventory_logs 
-            GROUP BY item, kategori, satuan
-        """
+        # 1. AMBIL SEMUA DATA MENTAH (JANGAN GROUP BY DI SQL)
+        # Kita ambil raw data agar bisa dibersihkan di Python
+        query_in = "SELECT item, kategori, satuan, qty FROM inventory_logs"
         df_in = pd.read_sql(query_in, conn)
         
-        # 2. Ambil Total Keluar per Item
-        query_out = "SELECT item, SUM(qty) as total_keluar FROM stock_outs GROUP BY item"
+        query_out = "SELECT item, qty, satuan FROM stock_outs"
         df_out = pd.read_sql(query_out, conn)
         
         conn.close()
         
-        # 3. Gabungkan (Merge)
+        # 2. PROSES DATA MASUK (IN)
         if not df_in.empty:
-            if not df_out.empty:
-                # Join data masuk dan keluar berdasarkan Nama Item
-                df_merged = pd.merge(df_in, df_out, on='item', how='left')
-                df_merged['total_keluar'] = df_merged['total_keluar'].fillna(0)
-            else:
-                df_merged = df_in
-                df_merged['total_keluar'] = 0
+            # BERSIHKAN TEXT (Normalization)
+            # Ini akan menyatukan "Kain Drill", "kain drill", "KAIN DRILL " menjadi satu
+            df_in['item'] = df_in['item'].str.strip().str.title()
+            df_in['satuan'] = df_in['satuan'].str.strip().str.lower()
+            df_in['kategori'] = df_in['kategori'].str.strip().str.title()
+            
+            # GROUP BY di PANDAS
+            df_in_grouped = df_in.groupby(['item', 'kategori', 'satuan'])['qty'].sum().reset_index()
+            df_in_grouped.rename(columns={'qty': 'total_masuk'}, inplace=True)
+        else:
+            df_in_grouped = pd.DataFrame(columns=['item', 'kategori', 'satuan', 'total_masuk'])
+
+        # 3. PROSES DATA KELUAR (OUT)
+        if not df_out.empty:
+            # Bersihkan text agar match dengan data masuk
+            df_out['item'] = df_out['item'].str.strip().str.title()
+            df_out['satuan'] = df_out['satuan'].str.strip().str.lower()
+            
+            # Group by Item (Simple version)
+            # Jika user salah input satuan saat keluar, kita tetap kurangi stok berdasarkan Nama Barang
+            df_out_grouped = df_out.groupby('item')['qty'].sum().reset_index()
+            df_out_grouped.rename(columns={'qty': 'total_keluar'}, inplace=True)
+        else:
+            df_out_grouped = pd.DataFrame(columns=['item', 'total_keluar'])
+        
+        # 4. GABUNGKAN (MERGE)
+        if not df_in_grouped.empty:
+            # Join berdasarkan Nama Barang
+            df_merged = pd.merge(df_in_grouped, df_out_grouped, on='item', how='left')
+            df_merged['total_keluar'] = df_merged['total_keluar'].fillna(0)
             
             # Hitung Stok Akhir
             df_merged['stok_saat_ini'] = df_merged['total_masuk'] - df_merged['total_keluar']
             
-            # Bersihkan kolom untuk tabel utama
-            final_df = df_merged[['item', 'kategori', 'satuan', 'stok_saat_ini']]
-            final_df.columns = ['Nama Barang', 'Kategori', 'Satuan', 'Stok Tersedia']
+            # Filter Stok > 0
+            df_merged = df_merged[df_merged['stok_saat_ini'] > 0]
+            
+            # Formatting Akhir
+            final_df = df_merged[['item', 'kategori', 'stok_saat_ini', 'satuan']]
+            final_df.columns = ['Nama Barang', 'Kategori', 'Stok Tersedia', 'Satuan']
+            
             return final_df
             
     return pd.DataFrame()
 
-# --- FUNGSI RIWAYAT (LOGS) ---
+# --- FUNGSI RIWAYAT ---
 def get_stock_ins_history():
     conn = get_db_connection()
     if conn:
-        df = pd.read_sql("SELECT id, tanggal, supplier, item, qty, harga FROM inventory_logs ORDER BY tanggal DESC", conn)
+        # Update: Tambahkan 'satuan' ke query
+        df = pd.read_sql("SELECT id, tanggal, supplier, item, qty, satuan, harga FROM inventory_logs ORDER BY tanggal DESC", conn)
         conn.close()
         return df
     return pd.DataFrame()
@@ -66,7 +90,7 @@ def get_stock_outs_history():
         return df
     return pd.DataFrame()
 
-# --- FUNGSI INPUT ---
+# --- FUNGSI INPUT (Tidak Berubah) ---
 def insert_stock_out(tgl, itm, qty, unit, proj):
     conn = get_db_connection()
     if conn:
@@ -78,42 +102,24 @@ def insert_stock_out(tgl, itm, qty, unit, proj):
         return True
     return False
 
+# --- FUNGSI INPUT (Updated with Text Cleaning) ---
 def insert_data(tgl, spl, kat, itm, qty, sat, hrg):
     conn = get_db_connection()
     if conn:
+        # 1. BERSIHKAN TEKS (Normalization)
+        # Agar "Kain drill", "KAIN DRILL", "Kain Drill " dianggap sama
+        clean_item = itm.strip().title()       # Contoh: " kain drill " -> "Kain Drill"
+        clean_kat = kat.strip().title()        # Contoh: "BAHAN BAKU" -> "Bahan Baku"
+        clean_spl = spl.strip()                # Hapus spasi depan/belakang
+        clean_sat = sat.strip().lower()        # Satuan jadi huruf kecil semua (pcs, kg)
+
         cur = conn.cursor()
         sql = """
             INSERT INTO inventory_logs (tanggal, supplier, kategori, item, qty, satuan, harga) 
             VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
-        val = (tgl, spl, kat, itm, qty, sat, hrg)
-        cur.execute(sql, val)
-        conn.commit()
-        conn.close()
-        return True
-    return False
-
-def update_data(id_b, tgl, spl, kat, itm, qty, sat, hrg):
-    conn = get_db_connection()
-    if conn:
-        cursor = conn.cursor()
-        sql = """
-            UPDATE inventory_logs 
-            SET tanggal=%s, supplier=%s, kategori=%s, item=%s, qty=%s, satuan=%s, harga=%s 
-            WHERE id=%s
-        """
-        val = (tgl, spl, kat, itm, qty, sat, hrg, id_b)
-        cursor.execute(sql, val)
-        conn.commit()
-        conn.close()
-        return True
-    return False
-
-def delete_data(id_b):
-    conn = get_db_connection()
-    if conn:
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM inventory_logs WHERE id=%s", (id_b,))
+        # Gunakan variable yang sudah dibersihkan (clean_...)
+        cur.execute(sql, (tgl, clean_spl, clean_kat, clean_item, qty, clean_sat, hrg))
         conn.commit()
         conn.close()
         return True
@@ -127,3 +133,20 @@ def load_data():
         conn.close()
         return df
     return pd.DataFrame()
+
+# --- TAMBAHKAN FUNGSI INI DI PALING BAWAH database.py ---
+
+def delete_inventory_log(id_log):
+    conn = get_db_connection()
+    if conn:
+        try:
+            cur = conn.cursor()
+            # Hapus baris berdasarkan ID
+            cur.execute("DELETE FROM inventory_logs WHERE id = %s", (id_log,))
+            conn.commit()
+            conn.close()
+            return True
+        except mysql.connector.Error as e:
+            st.error(f"Gagal menghapus: {e}")
+            return False
+    return False
