@@ -7,7 +7,7 @@ def show():
     # --- HEADER ---
     col_header_left, col_header_right = st.columns([3, 1])
     with col_header_left:
-        st.title("KSMB Dashboard")
+        st.title("Executive Dashboard")
         st.markdown('<p class="text-muted">Overview Kinerja Koperasi & Prediksi Penjualan</p>', unsafe_allow_html=True)
     with col_header_right:
          if st.button("🔄 Refresh Data"):
