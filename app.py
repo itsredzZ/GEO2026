@@ -3,7 +3,8 @@ from streamlit_option_menu import option_menu
 import styles
 import dashboard_page
 import supplier_page
-import tailor_page  # Halaman ini sekarang akan menjadi 'Gudang'
+import tailor_page
+import sales_page
 
 # 1. Konfigurasi Halaman (Wajib di baris pertama)
 st.set_page_config(
@@ -52,18 +53,7 @@ def main():
         tailor_page.show()
 
     elif selected == "Penjualan":
-        # Placeholder untuk halaman Penjualan
-        st.markdown("""
-            <div class="white-card">
-                <div style="background-color: #f1f5f9; padding: 15px 20px; border-bottom: 1px solid #e2e8f0;">
-                    <h2 style="margin: 0; font-size: 20px; color: #064e3b;">💰 Histori Penjualan</h2>
-                </div>
-                <div class="card-body">
-                    <p class="text-muted">Rekapitulasi proyek dan transaksi penjualan.</p>
-                </div>
-            </div>
-        """, unsafe_allow_html=True)
-        st.info("Fitur ini akan segera diaktifkan setelah data diupload.")
+        sales_page.show()
 
 if __name__ == "__main__":
     main()

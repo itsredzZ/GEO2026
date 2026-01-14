@@ -179,3 +179,51 @@ def get_all_karyawan():
     df = pd.read_sql(query, conn)
     conn.close()
     return df
+
+
+# --- FUNGSI UNTUK HALAMAN PENJUALAN / SALES ---
+def insert_sales_monthly(year, month, month_name, item_count, total_qty):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        sql = """
+        INSERT INTO sales_summary_monthly
+        (year, month, month_name, item_count, total_qty)
+        VALUES (%s, %s, %s, %s, %s)
+        """
+
+        cursor.execute(sql, (
+            year,
+            month,
+            month_name,
+            item_count,
+            total_qty
+        ))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return True
+
+    except Exception as e:
+        print("DB Error:", e)
+        return False
+
+def get_sales_monthly():
+    conn = get_db_connection()
+    query = """
+        SELECT
+            year AS "Tahun",
+            month AS "Bulan (Angka)",
+            month_name AS "Bulan",
+            item_count AS "Jumlah Item",
+            total_qty AS "Total Qty"
+        FROM sales_summary_monthly
+        ORDER BY year, month
+    """
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
+
+
