@@ -127,3 +127,55 @@ def load_data():
         conn.close()
         return df
     return pd.DataFrame()
+
+
+# --- FUNGSI UNTUK HALAMAN PENJAHIT / KARYAWAN ---
+def insert_penjahit(
+    kode_penjahit, nama, nik, alamat, kecamatan, usia,
+    kerapian, ketepatan_waktu, quantity, komitmen,
+    spesialis, status_km
+):
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        sql = """
+        INSERT INTO tailors (
+            kode_penjahit, nama, nik, alamat, kecamatan, usia,
+            kerapian, ketepatan_waktu, quantity, komitmen,
+            spesialis, status_keluarga_miskin
+        )
+        VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+        """
+        cursor.execute(sql, (
+            kode_penjahit, nama, nik, alamat, kecamatan, usia,
+            kerapian, ketepatan_waktu, quantity, komitmen,
+            spesialis, status_km
+        ))
+        conn.commit()
+        return True
+    except Exception as e:
+        print("DB Error:", e)
+        return False
+
+def get_all_karyawan():
+    conn = get_db_connection()
+    query = """
+    SELECT
+        kode_penjahit AS "Kode Penjahit",
+        nama AS "Nama",
+        nik AS "NIK",
+        alamat AS "Alamat",
+        kecamatan AS "Kecamatan",
+        usia AS "Usia",
+        kerapian AS "Kerapian",
+        ketepatan_waktu AS "Ketepatan Waktu",
+        quantity AS "Quantity",
+        komitmen AS "Komitmen",
+        COALESCE(spesialis, 'N/A') AS "Spesialis",
+        COALESCE(status_keluarga_miskin, 'N/A') AS "Status Keluarga Miskin"
+    FROM tailors
+    ORDER BY nama
+    """
+    df = pd.read_sql(query, conn)
+    conn.close()
+    return df
